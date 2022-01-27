@@ -1,17 +1,47 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const api = require("./api");
 const { google } = require("googleapis");
-
+const { OAuth2Client } = require("google-auth-library");
 const { API_KEY } = require("./client_secret.json");
-const PORT = process.env.PORT || 3000;
+const { web } = require("./client_secret.json");
+const PORT = process.env.PORT || 8080;
 const youtube = google.youtube({
   version: "v3",
   auth: API_KEY,
 });
+const client = new OAuth2Client(web.client_id);
 
-app.get("/", (req, res) => {
-  res.send("Hello!");
+// Middlewares
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.post("/api/googleLogin", (req, res) => {
+  const { tokenId } = req.body;
+  const response = client.verifyIdToken({
+    idToken: tokenId,
+    audience: web.client_id,
+  });
+  console.log(response.payload);
+  res.json(response.payload);
+});
+
+app.get("/api/subs", async (req, res) => {
+  try {
+    const response = await youtube.subscriptions.list({
+      part: "snippet,contentDetails",
+      mine: true,
+      maxResults: 10,
+      order: "alphabetical",
+      access_token: req.headers["authorization"],
+    });
+    res.json(response.data.items);
+  } catch (error) {
+    console.log(error);
+    res.send(error.message);
+  }
 });
 
 app.get("/search", async (req, res) => {
