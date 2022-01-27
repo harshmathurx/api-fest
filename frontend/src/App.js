@@ -1,9 +1,16 @@
-import "./App.css";
+import Login from "./components/login/Login";
+import Page1 from "./components/page1/Page1";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <Login />
+      <Router>
+        <Switch>
+          <Route path="/page1" component={Page1} />
+        </Switch>
+      </Router>
     </div>
   );
 }
