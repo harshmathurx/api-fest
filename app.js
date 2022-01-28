@@ -146,4 +146,4 @@ app.get("/allComments", async (req, res) => {
   }
 });
 
-server.listen(PORT, () => console.log(`Server listening on PORT: ${PORT}`));
+app.listen(PORT, () => console.log(`Server listening on PORT: ${PORT}`));
