@@ -1,43 +1,62 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+
 const api = require("./api");
 const { google } = require("googleapis");
-const { OAuth2Client } = require("google-auth-library");
 const { API_KEY } = require("./client_secret.json");
-const { web } = require("./client_secret.json");
 const PORT = process.env.PORT || 8080;
 const youtube = google.youtube({
   version: "v3",
   auth: API_KEY,
 });
-const client = new OAuth2Client(web.client_id);
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 
 // Routes
-app.post("/api/googleLogin", (req, res) => {
-  const { tokenId } = req.body;
-  const response = client.verifyIdToken({
-    idToken: tokenId,
-    audience: web.client_id,
-  });
-  console.log(response.payload);
-  res.json(response.payload);
-});
-
 app.get("/api/subs", async (req, res) => {
   try {
-    const response = await youtube.subscriptions.list({
-      part: "snippet,contentDetails",
-      mine: true,
-      maxResults: 10,
-      order: "alphabetical",
-      access_token: req.headers["authorization"],
-    });
-    res.json(response.data.items);
+    const max_results = 50; // 50 max
+    var nextPageToken;
+    var subscriptions = [];
+    do {
+      var response = await youtube.subscriptions.list({
+        part: "snippet",
+        mine: true,
+        maxResults: max_results,
+        order: "alphabetical",
+        fields: "items.snippet.resourceId.channelId,nextPageToken",
+        access_token: req.headers["authorization"],
+        pageToken: nextPageToken,
+      });
+      var channelIds = response.data.items.map(
+        (item) => item.snippet.resourceId.channelId
+      );
+      var response2 = await youtube.channels.list({
+        part: "snippet,statistics",
+        id: channelIds.toString(),
+        fields: "items.snippet,items.statistics,items.id",
+        maxResults: max_results,
+      });
+      // console.log(response2.data);
+      response2.data.items.forEach((item) => {
+        var sub = {};
+        sub.id = item.id;
+        sub.title = item.snippet.title;
+        sub.description = item.snippet.description;
+        sub.publishedAt = item.snippet.publishedAt;
+        sub.country = item.snippet.country;
+        sub.picture = item.snippet.thumbnails.default.url;
+        sub.viewCount = item.statistics.viewCount;
+        sub.subscriberCount = item.statistics.subscriberCount;
+        sub.videoCount = item.statistics.videoCount;
+        subscriptions.push(sub);
+      });
+      nextPageToken = response.data.nextPageToken;
+    } while (nextPageToken);
+    res.json(subscriptions);
   } catch (error) {
     console.log(error);
     res.send(error.message);
@@ -127,4 +146,4 @@ app.get("/allComments", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server listening on PORT: ${PORT}`));
+server.listen(PORT, () => console.log(`Server listening on PORT: ${PORT}`));
