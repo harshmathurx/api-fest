@@ -32,7 +32,7 @@ export const GoogleLoginButton = () => {
       onFailure={responseGoogleFailure}
       cookiePolicy={"single_host_origin"}
       scope="https://www.googleapis.com/auth/youtube.readonly"
-      responseType="token"
+      // responseType="token"
     />
   );
 };
