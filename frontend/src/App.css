@@ -1,3 +1,6 @@
+.container{
+  display: flex-column; justify-content: center; align-items: center;
+}
 .App {
   text-align: center;
 }

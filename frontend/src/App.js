@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { GoogleLoginButton } from "./components/GoogleLoginButton";
 import { Home } from "./components/Home";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       {/* <header className="App-header"> */}
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<GoogleLoginButton />} />
+          <Route exact path="/" element={<Login />} />
           <Route exact path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
