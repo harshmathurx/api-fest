@@ -38,12 +38,14 @@
 }
 
 .grid {
+  background-color: #282c34;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 12px;
+  grid-gap: 4pc;
+  /* grid-gap: 12px; */
 }
 
 .item {
   min-height: 200px;
-  background-color: #eee;
+  background-color: #61dafbff;
 }

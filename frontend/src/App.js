@@ -7,14 +7,14 @@ import { Home } from "./components/Home";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <BrowserRouter>
-          <Routes>
-            <Route exact path="/" element={<GoogleLoginButton />} />
-            <Route exact path="/home" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-      </header>
+      {/* <header className="App-header"> */}
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<GoogleLoginButton />} />
+          <Route exact path="/home" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+      {/* </header> */}
     </div>
   );
 }
