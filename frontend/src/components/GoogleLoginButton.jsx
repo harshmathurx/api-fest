@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
-import CREDENTIALS from "../client_secret.json";
 import api from "../api";
 
 export const GoogleLoginButton = () => {
@@ -13,8 +12,6 @@ export const GoogleLoginButton = () => {
   const responseGoogleSuccess = async (response) => {
     console.log(response);
     try {
-      // window.location.href = "/home";
-      // navigate("/home");
       const result = await api.get("/subs", {
         headers: {
           Authorization: response.accessToken,
@@ -29,7 +26,7 @@ export const GoogleLoginButton = () => {
 
   return (
     <GoogleLogin
-      clientId={CREDENTIALS.web.client_id}
+      clientId={process.env.REACT_APP_CLIENT_ID}
       buttonText="Login"
       onSuccess={responseGoogleSuccess}
       onFailure={responseGoogleFailure}

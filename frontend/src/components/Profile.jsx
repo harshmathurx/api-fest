@@ -4,7 +4,6 @@ import { UserCard } from "react-ui-cards";
 export const Profile = ({ item }) => {
   return (
     <div>
-      {/* publishedAt country, header can be omitted */}
       <div>
         <UserCard
           float
