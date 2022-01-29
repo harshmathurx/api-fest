@@ -39,9 +39,12 @@
 
 .grid {
   background-color: #282c34;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 4pc;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 4pc; */
   /* grid-gap: 12px; */
 }
 
